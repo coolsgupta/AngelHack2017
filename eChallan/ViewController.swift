@@ -9,10 +9,18 @@
 import UIKit
 
 class ViewController: UIViewController {
-
+    
+    //MARK: Variables
+    var imagePicker : UIImagePickerController? = nil
+    
+    //MARK: Outlets
+    @IBOutlet weak var capturedImage: UIImageView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        imagePicker = UIImagePickerController()
+        imagePicker?.sourceType = .camera
+        imagePicker?.delegate = self
     }
 
     override func didReceiveMemoryWarning() {
@@ -20,6 +28,20 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
+    @IBAction func imageButtonPressed(_ sender: Any)
+    {
+        self.present(self.imagePicker!, animated: true, completion: nil)
+    }
 
 }
 
+extension ViewController : UIImagePickerControllerDelegate,UINavigationControllerDelegate
+{
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        self.dismiss(animated: true, completion: nil)
+    }
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        let chosenImage = info[UIImagePickerControllerOriginalImage] as! UIImage
+        self.capturedImage.image = chosenImage
+    }
+}
